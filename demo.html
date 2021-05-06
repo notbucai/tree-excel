@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>JS-XLSX Demo</title>
+
+  <!-- <script type="text/javascript" src="./jszip.js"></script> -->
+  <!-- <script type="text/javascript" src="./xlsx.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdn.bootcdn.net/ajax/libs/exceljs/4.2.1/exceljs.min.js"></script>
+  <script src="./ExportXlsxByTreeData.js"></script>
+
+</head>
+
+<body>
+  <p>依赖：</p>
+  <ol>
+    <li>FileSaver.js</li>
+    <li>exceljs</li>
+  </ol>
+
+  <p>数据格式要求</p>
+  <pre>
+[
+  {
+    value: "value 1",
+    list: [
+      {
+        value: "value 2"
+      }
+    ]
+  }
+]
+  </pre>
+
+  <button onclick="exportExcel()">点击测试</button>
+
+  <pre>
+调用说明
+1. 导入依赖
+2. 导入 ExportXlsxByTreeData.js 
+3. 调用 ExportXlsxByTreeData.exportExcel(header,data);
+
+  const header = ["用餐日期", "餐别", "地址", "工号", "员工姓名", "菜品名称", "份数"];
+  const data = [
+    {
+      value: "显示的值",
+      list: [
+        {
+          value: "显示的值",
+        }
+      ]
+    }
+  ];
+  ExportXlsxByTreeData.exportExcel(header, data);
+
+
+
+
+/**
+* 解析数据
+* @param {Array} header 头信息
+* @param {Array} treeData 树状数据
+* @example 
+*  const header = ["用餐日期", "餐别", "地址", "工号", "员工姓名", "菜品名称", "份数"];
+*  const data = [
+*    {
+*      value: "显示的值",
+*      list: [
+*        {
+*          value: "显示的值",
+*        }
+*      ]
+*    }
+*  ];
+*  exportExcel(header, data);
+*/
+</pre>
+
+  <pre>
+详细示例
+
+const data = [ // 时间
+  {
+    value: "2020-05-06",
+    list: [ // 餐别
+      {
+        value: "早餐",
+        list: [ // 地址列表
+          {
+            value: "一号地址",
+            list: [ // 资料
+              {
+                value: '1234',
+                list: [
+                  {
+                    value: '王',
+                    list: [ // 菜品列表
+                      {
+                        value: '土豆', list: [{ value: 1 }]
+                      },
+                      {
+                        value: '萝卜1', list: [{ value: 2 }]
+                      },
+                      {
+                        value: '黄瓜1', list: [{ value: 4 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '李',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '赵',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            value: "二号地址",
+            list: [ // 资料
+              {
+                value: '1234',
+                list: [
+                  {
+                    value: '王',
+                    list: [ // 菜品列表
+                      {
+                        value: '土豆',
+                        list: [
+                          {
+                            value: 2
+                          }
+                        ]
+                      },
+                      {
+                        value: '萝卜1', list: [{ value: 2 }]
+                      },
+                      {
+                        value: '黄瓜1', list: [{ value: 4 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '李',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '赵',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            value: "三号地址",
+            list: [ // 资料
+              {
+                value: '1234',
+                list: [
+                  {
+                    value: '王',
+                    list: [ // 菜品列表
+                      {
+                        value: '土豆', list: [{ value: 1 }]
+                      },
+                      {
+                        value: '萝卜1', list: [{ value: 2 }]
+                      },
+                      {
+                        value: '黄瓜1', list: [{ value: 4 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '李',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '赵',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        value: "午餐",
+        list: [ // 地址列表
+          {
+            value: "一号地址",
+            list: [ // 资料
+              {
+                value: '1234',
+                list: [
+                  {
+                    value: '王',
+                    list: [ // 菜品列表
+                      {
+                        value: '土豆', list: [{ value: 1 }]
+                      },
+                      {
+                        value: '萝卜1', list: [{ value: 2 }]
+                      },
+                      {
+                        value: '黄瓜1', list: [{ value: 4 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '李',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '赵',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            value: "二号地址",
+            list: [ // 资料
+              {
+                value: '1234',
+                list: [
+                  {
+                    value: '王',
+                    list: [ // 菜品列表
+                      {
+                        value: '土豆', list: [{ value: 1 }]
+                      },
+                      {
+                        value: '萝卜1', list: [{ value: 2 }]
+                      },
+                      {
+                        value: '黄瓜1', list: [{ value: 4 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '李',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '赵时候水电费水电费共',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            value: "三号地址",
+            list: [ // 资料
+              {
+                value: '1234',
+                list: [
+                  {
+                    value: '王',
+                    list: [ // 菜品列表
+                      {
+                        value: '土豆', list: [{ value: 1 }]
+                      },
+                      {
+                        value: '萝卜1', list: [{ value: 2 }]
+                      },
+                      {
+                        value: '黄瓜1', list: [{ value: 4 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '李',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: '332',
+                list: [
+                  {
+                    value: '赵',
+                    list: [ // 菜品列表
+                      {
+                        value: '肉', list: [{ value: 0 }]
+                      },
+                      {
+                        value: '黑2', list: [{ value: 99 }]
+                      },
+                      {
+                        value: '黑3', list: [{ value: 2 }]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        value: "晚餐",
+      },
+    ]
+  }
+];
+const header = ["用餐日期", "餐别", "地址", "工号", "员工姓名", "菜品名称", "份数"];
+
+function exportExcel() {
+  ExportXlsxByTreeData.exportExcel(header, data)
+}
+
+function _exportExcel() {
+
+  // 合并 headers 和 data
+  const header = ["用餐日期", "餐别", "地址", "工号", "员工姓名", "菜品名称", "份数"];
+  var output = Object.assign({}, header.reduce((pv, cv, i) => {
+    pv[String.fromCodePoint('A'.codePointAt() + i) + '1'] = {
+      v: cv,
+      s: {
+        alignment: {
+          horizontal: 'center'
+        },
+        font: {
+          bold: true
+        }
+      }
+    };
+    return pv;
+  }, {}), newData);
+  // 表格范围，范围越大生成越慢
+  var ref = 'A1:G100';
+  // 构建 workbook 对象
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet('Sheet1');
+  worksheet.properties.defaultColWidth = 14;
+
+  Object.keys(output).forEach(key => {
+    const { v, s } = output[key];
+    const cell = worksheet.getCell(key);
+    cell.value = v;
+    if (s) {
+      cell.alignment = s.alignment;
+      cell.fill = s.fill;
+      cell.font = s.font;
+    }
+  });
+  merges.forEach(({ s, e }) => {
+    const sA = String.fromCodePoint('A'.codePointAt(0) + s.c) + (s.r + 1);
+    const sB = String.fromCodePoint('A'.codePointAt(0) + e.c) + (e.r + 1);
+    worksheet.mergeCells(sA + ':' + sB);
+  });
+  workbook.xlsx.writeBuffer().then(function (data) {
+    const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' });
+    saveAs(blob, 'tests.xlsx');
+  });
+  // workbook.xlsx.writeFile('x.xlsx');
+  // var wb = {
+  //   SheetNames: ['Sheet1'],
+  //   Sheets: {
+  //     // Sheet1 表示工作簿名称
+  //     Sheet1: Object.assign({}, output, {
+  //       '!ref': ref,
+  //       // 合并
+  //       '!merges': merges
+  //     })
+  //   }
+  // };
+  // 写出Excel工作簿
+  // XLSX.writeFile(wb, '111.xlsx');
+
+}
+
+
+</pre>
+
+  <script type="text/javascript">
+
+    const header = ['日期', '人员', '订单号', '菜品', '价格'];
+    const data = [
+      {
+        value: "2021-05-06",
+        list: [
+          {
+            value: "不才",
+            list: [
+              {
+                value: "O891JHU876HGT",
+                list: [
+                  {
+                    value: "皮蛋",
+                    list: [
+                      {
+                        value: "¥10"
+                      }
+                    ]
+                  },
+                  {
+                    value: "红烧肉",
+                    list: [
+                      {
+                        value: "¥60"
+                      }
+                    ]
+                  },
+                  {
+                    value: "满汉全席",
+                    list: [
+                      {
+                        value: "¥6000"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                value: "O89JH5K8234JHT",
+                list: [
+                  {
+                    value: "过桥米线",
+                    list: [
+                      {
+                        value: "¥20"
+                      }
+                    ]
+                  },
+                  {
+                    value: "蛋炒饭",
+                    list: [
+                      {
+                        value: "¥6"
+                      }
+                    ]
+                  },
+                  {
+                    value: "手抓饭",
+                    list: [
+                      {
+                        value: "¥9"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+        ]
+      }
+    ];
+    function exportExcel() {
+      ExportXlsxByTreeData.exportExcel(header, data)
+    }
+
+    function _exportExcel() {
+
+      // 合并 headers 和 data
+      const header = ["用餐日期", "餐别", "地址", "工号", "员工姓名", "菜品名称", "份数"];
+      var output = Object.assign({}, header.reduce((pv, cv, i) => {
+        pv[String.fromCodePoint('A'.codePointAt() + i) + '1'] = {
+          v: cv,
+          s: {
+            alignment: {
+              horizontal: 'center'
+            },
+            font: {
+              bold: true
+            }
+          }
+        };
+        return pv;
+      }, {}), newData);
+      // 表格范围，范围越大生成越慢
+      var ref = 'A1:G100';
+      // 构建 workbook 对象
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Sheet1');
+      worksheet.properties.defaultColWidth = 14;
+
+      Object.keys(output).forEach(key => {
+        const { v, s } = output[key];
+        const cell = worksheet.getCell(key);
+        cell.value = v;
+        if (s) {
+          cell.alignment = s.alignment;
+          cell.fill = s.fill;
+          cell.font = s.font;
+        }
+      });
+      merges.forEach(({ s, e }) => {
+        const sA = String.fromCodePoint('A'.codePointAt(0) + s.c) + (s.r + 1);
+        const sB = String.fromCodePoint('A'.codePointAt(0) + e.c) + (e.r + 1);
+        worksheet.mergeCells(sA + ':' + sB);
+      });
+      workbook.xlsx.writeBuffer().then(function (data) {
+        const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' });
+        saveAs(blob, 'tests.xlsx');
+      });
+      // workbook.xlsx.writeFile('x.xlsx');
+      // var wb = {
+      //   SheetNames: ['Sheet1'],
+      //   Sheets: {
+      //     // Sheet1 表示工作簿名称
+      //     Sheet1: Object.assign({}, output, {
+      //       '!ref': ref,
+      //       // 合并
+      //       '!merges': merges
+      //     })
+      //   }
+      // };
+      // 写出Excel工作簿
+      // XLSX.writeFile(wb, '111.xlsx');
+
+    }
+
+  </script>
+</body>
+
+</html>

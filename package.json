@@ -1,0 +1,12 @@
+{
+  "name": "xlsx",
+  "version": "1.0.0",
+  "description": "解析树结构并导出 excel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["excel", "xlsx", "tree", "data", "merge"],
+  "author": "不才 <1450941858@qq.com> (https://www.notbucai.com/)",
+  "license": "ISC"
+}
