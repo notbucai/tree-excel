@@ -17,11 +17,11 @@
 ```json
 [
   {
-    value: "value 1",
-    list: [
+    "value": "value 1",
+    "list": [
       {
-        value: "value 2"
-      },
+        "value": "value 2"
+      }
     ]
   }
 ]
